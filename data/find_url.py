@@ -20,16 +20,21 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 from bs4 import BeautifulSoup
 import requests
 
-url = "https://thepiratebay-proxylist.org/"
+url = "https://thepiratespace.org/"
 raw = requests.get(url)
 raw = raw.content
 soup = BeautifulSoup(raw, "lxml")
 links = soup.find_all('td', {'title': 'URL'}, limit=2)
 myList = []
 def find_url_list():
+	global url
 	for i in links:
-		myList.append(i.a["href"]);
-	return myList
+     myList.append(i.a["href"])
+	# If myList is empty, append the original URL
+	if not myList:
+     myList.append(url)
+     
+    return myList
 
 if __name__ == "__main__":
 	print("It's a module. Can only be imported!");
