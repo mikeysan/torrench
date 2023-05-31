@@ -51,6 +51,7 @@ def init(args):
 	# Resolve input arguments - END
 
 def main(input_title, page_limit):
+	print(f"Searching for: {input_title} across {page_limit} pages")
 	try:
 		## Adding imports here since they are only required if this function is called.
 		import requests
@@ -66,6 +67,7 @@ def main(input_title, page_limit):
 	# Get proxy list
 	url_list = []
 	url_list = find_url.find_url_list()
+	print(f"URL list: {url_list}")
 	
 	title = input_title.replace(" ", "+")
 	total_result_count = 0
@@ -95,6 +97,7 @@ def main(input_title, page_limit):
 			while(url_list_count < len(url_list)):
 				try:
 					raw = requests.get(url+"/s/", params=search)
+					print(f"HTTP status code: {raw.status_code}")
 					raw = raw.content
 					break;
 				except requests.exceptions.ConnectionError as e:
@@ -103,6 +106,7 @@ def main(input_title, page_limit):
 					url = url_list[url_list_count]
 			# End determining proxy site
 			soup = BeautifulSoup(raw, "lxml")
+			print(f"Parsed HTML: {soup.prettify()}")
 			# Result found or not? 
 			try:
 				content = soup.find_all('table', id="searchResult")[0]
@@ -112,6 +116,7 @@ def main(input_title, page_limit):
 					break	
 					
 			data = content.find_all('tr')
+			print(f"Extracted data: {data}")
 			mylist = []
 			### Extraction begins here ###
 			for i in data:
